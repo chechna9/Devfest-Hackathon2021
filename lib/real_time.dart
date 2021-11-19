@@ -1,11 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
+import 'dart:io';
 
-var option =
+var options =
     ObjectDetectorOptions(classifyObjects: true, trackMutipleObjects: true);
-final objectDetector = GoogleMlKit.vision.objectDetector(option);
+final objectDetector = GoogleMlKit.vision.objectDetector(options);
 
 class RealTime extends StatefulWidget {
   final List<CameraDescription>? cameras;
@@ -16,6 +19,7 @@ class RealTime extends StatefulWidget {
 }
 
 class _RealTimeState extends State<RealTime> {
+  DateTime then = DateTime.now();
   String labels = '';
   CameraController? controller;
   CameraImage? cameraImage;
@@ -27,17 +31,28 @@ class _RealTimeState extends State<RealTime> {
   }
 
   void loadCamera() {
-    controller = CameraController(widget.cameras![0], ResolutionPreset.medium);
+    controller = CameraController(widget.cameras![0], ResolutionPreset.medium,
+        enableAudio: false);
     controller!.initialize().then((_) {
       if (!mounted) {
         return;
       }
 
       setState(() {
-        controller!.startImageStream((imageStream) {
-          cameraImage = imageStream;
-          runModel();
-        });
+        then = DateTime.now();
+        controller!
+            .startImageStream((imageStream) {
+              if ((DateTime.now().second - then.second > 1) ||
+                  (DateTime.now().second - then.second == -59)) {
+                cameraImage = imageStream;
+                print("sii");
+                runModel();
+              }
+            })
+            .asStream()
+            .listen((event) {
+              print("test");
+            });
       });
     });
   }
@@ -91,14 +106,17 @@ class _RealTimeState extends State<RealTime> {
     if (cameraImage != null) {
       List<DetectedObject> objects =
           await objectDetector.processImage(prepareInput());
-      labels = '';
+      String _labels = '';
       for (DetectedObject obj in objects) {
         for (Label label in obj.getLabels()) {
-          setState(() {
-            labels = labels + '${label.getText()}\n';
-          });
+          _labels += '${label.getText()}';
+          print(_labels);
         }
       }
+      if (_labels != labels && _labels.isNotEmpty)
+        setState(() {
+          labels = _labels;
+        });
     }
   }
 
