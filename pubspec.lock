@@ -95,6 +95,7 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+<<<<<<< HEAD
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -121,6 +122,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.3"
+=======
+  flutter_text_to_speech:
+    dependency: "direct main"
+    description:
+      name: flutter_text_to_speech
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.7"
+>>>>>>> f9a87f0242d5bbe27f8638ab4e0edc89f8833a9a
   matcher:
     dependency: transitive
     description:
