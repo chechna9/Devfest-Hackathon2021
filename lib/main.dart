@@ -19,16 +19,16 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key ?key, this.title}) : super(key: key);
 
-  final String title;
+  final String ?title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  VoiceController _voiceController;
+  VoiceController ?_voiceController;
 
   String text =
       'This is an example tutorial of using text to speech in a flutter application! The example is provided on fluttercentral website.';
@@ -43,12 +43,12 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void dispose() {
     super.dispose();
-    _voiceController.stop();
+    _voiceController!.stop();
   }
 
   _playVoice() {
-    _voiceController.init().then((_) {
-      _voiceController.speak(
+    _voiceController!.init().then((_) {
+      _voiceController!.speak(
         text,
         VoiceControllerOptions(),
       );
@@ -57,19 +57,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _speechAlertObject(String classe_to_alert){
     setState(){
-      text = "Alert! ${classe_to_alert}, behind you."
+      text = "Alert! $classe_to_alert, behind you.";
     }
   }
 
   _stopVoice() {
-    _voiceController.stop();
+    _voiceController!.stop();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title!),
       ),
       body: Center(
         child: Column(
