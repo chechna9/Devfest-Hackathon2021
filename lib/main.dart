@@ -8,6 +8,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras();
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     initialRoute: '/real_time',
     routes: {
       '/real_time': (context) => RealTime(
@@ -16,20 +17,3 @@ Future<void> main() async {
     },
   ));
 }
-
-// class CameraApp extends StatefulWidget {
-//   @override
-//   _CameraAppState createState() => _CameraAppState();
-// }
-
-// class _CameraAppState extends State<CameraApp> {
-//   @override
-//   Widget build(BuildContext context) {
-//     if (!controller!.value.isInitialized) {
-//       return Container();
-//     }
-//     return MaterialApp(
-//       home: CameraPreview(controller!),
-//     );
-//   }
-// }
