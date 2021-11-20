@@ -1,3 +1,8 @@
+import 'package:brainsapp/Screens/Help_Camera.dart';
+import 'package:brainsapp/Screens/Home.dart';
+import 'package:brainsapp/Screens/Login.dart';
+import 'package:brainsapp/Screens/SignIn.dart';
+import 'package:brainsapp/Screens/Speech.dart';
 import 'dart:async';
 import 'package:brainsapp/real_time.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +18,8 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,7 +35,5 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SpeechPage(title: 'Text To Speech'),
-    );
-  }
-}
+      home: Home(),
+ };
