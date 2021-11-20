@@ -1,7 +1,9 @@
 import 'package:brainsapp/Screens/Help_Camera.dart';
 import 'package:brainsapp/Screens/Home.dart';
+import 'package:brainsapp/Screens/Loading.dart';
 import 'package:brainsapp/Screens/Login.dart';
 import 'package:brainsapp/Screens/SignIn.dart';
+import 'package:brainsapp/Screens/splash_screen.dart';
 import 'dart:async';
 import 'package:brainsapp/real_time.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +23,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/home',
+      initialRoute: '/splash_screen',
       routes: {
+        '/splash_screen': (context) => SplashScreen(),
         '/real_time': (context) => RealTime(
               cameras: cameras,
             ),
+        '/home': (context) => Home(),
+        '/camera': (context) => HelpCamera(
+              cameras: cameras,
+            ),
+        '/signIn': (context) => Signin(),
+        '/login': (context) => Login(),
+        '/loading': (context) => Loading(),
       },
       title: 'Text To Speech',
       theme: ThemeData(

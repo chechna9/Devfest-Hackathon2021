@@ -31,9 +31,9 @@ dependencies:
   google_ml_kit: ^0.7.3
   camera: ^0.8.0
   video_player: ^2.2.7
-  
   flutter_text_to_speech: ^3.0.7
-
+  animated_text_kit: ^4.2.1
+  flutter_spinkit: ^5.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
