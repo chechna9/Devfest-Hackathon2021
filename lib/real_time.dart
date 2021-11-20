@@ -6,9 +6,12 @@ import 'package:camera/camera.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'dart:io';
 
-var options =
+double threshold = 0.8;
+var objectOptions =
     ObjectDetectorOptions(classifyObjects: true, trackMutipleObjects: true);
-final objectDetector = GoogleMlKit.vision.objectDetector(options);
+var imgLablOptions = ImageLabelerOptions();
+final objectDetector = GoogleMlKit.vision.objectDetector(objectOptions);
+final imageLabeler = GoogleMlKit.vision.imageLabeler(imgLablOptions);
 
 class RealTime extends StatefulWidget {
   final List<CameraDescription>? cameras;
@@ -20,6 +23,7 @@ class RealTime extends StatefulWidget {
 
 class _RealTimeState extends State<RealTime> {
   DateTime then = DateTime.now();
+  Stopwatch timer = Stopwatch();
   String labels = '';
   CameraController? controller;
   CameraImage? cameraImage;
@@ -27,11 +31,13 @@ class _RealTimeState extends State<RealTime> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    timer.start();
     loadCamera();
   }
 
   void loadCamera() {
-    controller = CameraController(widget.cameras![0], ResolutionPreset.medium,
+    controller = CameraController(
+        widget.cameras![0], ResolutionPreset.ultraHigh,
         enableAudio: false);
     controller!.initialize().then((_) {
       if (!mounted) {
@@ -40,19 +46,16 @@ class _RealTimeState extends State<RealTime> {
 
       setState(() {
         then = DateTime.now();
-        controller!
-            .startImageStream((imageStream) {
-              if ((DateTime.now().second - then.second > 1) ||
-                  (DateTime.now().second - then.second == -59)) {
-                cameraImage = imageStream;
-                print("sii");
-                runModel();
-              }
-            })
-            .asStream()
-            .listen((event) {
-              print("test");
-            });
+        controller!.startImageStream((imageStream) {
+          // if ((DateTime.now().second - then.second > 1) ||
+          //     (DateTime.now().second - then.second == -59))
+          if (timer.elapsedMilliseconds > 1000) {
+            timer.reset();
+            cameraImage = imageStream;
+            print("sii");
+            runModel();
+          }
+        });
       });
     });
   }
@@ -104,14 +107,22 @@ class _RealTimeState extends State<RealTime> {
 
   runModel() async {
     if (cameraImage != null) {
-      List<DetectedObject> objects =
-          await objectDetector.processImage(prepareInput());
+      // List<DetectedObject> objects =
+      //     await objectDetector.processImage(prepareInput());
+      List<ImageLabel> objects =
+          await imageLabeler.processImage(prepareInput());
       String _labels = '';
-      for (DetectedObject obj in objects) {
-        for (Label label in obj.getLabels()) {
-          _labels += '${label.getText()}';
-          print(_labels);
-        }
+      // for (DetectedObject obj in objects) {
+      //   for (Label label in obj.getLabels()) {
+      //     _labels += '${label.getText()}';
+      //     print(_labels);
+      //   }
+      // }
+      for (ImageLabel label in objects) {
+        if (label.confidence > threshold) _labels += '${label.label}';
+
+        print(_labels);
+        print(label.confidence);
       }
       if (_labels != labels && _labels.isNotEmpty)
         setState(() {

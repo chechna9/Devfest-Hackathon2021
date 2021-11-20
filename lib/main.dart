@@ -17,9 +17,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/speech',
+      initialRoute: '/real_time',
       routes: {
-        '/speech': (context) => SpeechPage(),
+        // '/speech': (context) => SpeechPage(),
         '/real_time': (context) => RealTime(
               cameras: cameras,
             ),
@@ -28,7 +28,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SpeechPage(title: 'Text To Speech'),
     );
   }
 }
