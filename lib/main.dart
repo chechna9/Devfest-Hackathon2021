@@ -3,10 +3,18 @@ import 'package:brainsapp/Screens/Home.dart';
 import 'package:brainsapp/Screens/Login.dart';
 import 'package:brainsapp/Screens/SignIn.dart';
 import 'package:brainsapp/Screens/Speech.dart';
+import 'dart:async';
+import 'package:brainsapp/real_time.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_text_to_speech/flutter_text_to_speech.dart';
+import 'package:camera/camera.dart';
+import 'routes/speechPage.dart';
 
-void main() => runApp(MyApp());
+List<CameraDescription>? cameras;
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  cameras = await availableCameras();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -16,12 +24,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      initialRoute: '/speech',
+      routes: {
+        '/speech': (context) => SpeechPage(),
+        '/real_time': (context) => RealTime(
+              cameras: cameras,
+            ),
+      },
       title: 'Text To Speech',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Home(),
-    );
-  }
-}
-
+ };
