@@ -6,7 +6,7 @@ import 'package:camera/camera.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'dart:io';
 
-double threshold = 0.8;
+double threshold = 0.6;
 var objectOptions =
     ObjectDetectorOptions(classifyObjects: true, trackMutipleObjects: true);
 var imgLablOptions = ImageLabelerOptions();
@@ -36,8 +36,7 @@ class _RealTimeState extends State<RealTime> {
   }
 
   void loadCamera() {
-    controller = CameraController(
-        widget.cameras![0], ResolutionPreset.ultraHigh,
+    controller = CameraController(widget.cameras![0], ResolutionPreset.high,
         enableAudio: false);
     controller!.initialize().then((_) {
       if (!mounted) {
@@ -119,7 +118,7 @@ class _RealTimeState extends State<RealTime> {
       //   }
       // }
       for (ImageLabel label in objects) {
-        if (label.confidence > threshold) _labels += '${label.label}';
+        if (label.confidence > threshold) _labels += '${label.label}\n';
 
         print(_labels);
         print(label.confidence);
@@ -152,7 +151,13 @@ class _RealTimeState extends State<RealTime> {
             child: CameraPreview(controller!),
           ),
           Container(
-            child: Text('$labels'),
+            child: Text(
+              '$labels',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+              maxLines: 5,
+            ),
           ),
         ],
       ),
